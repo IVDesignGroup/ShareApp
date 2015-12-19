@@ -25,7 +25,7 @@
         <div class="text-center padded padding-bottom-zero clearfix">
             <p>Scan to share with QR Code.</p>
             <div class="qr-holder margin-top-ten" style="max-width:190px; margin:0 auto;">
-                <img ng-src="https://chart.googleapis.com/chart?chs=180x180&cht=qr&chl=http://www.buildfire.com/proxy?appid=12345"/>
+                <img ng-src="qrCodeUrl"/>
                 <div class="margin-top-fifteen">
                     <a class="btn btn-primary stretch">Share the App Via...</a>
                 </div>
@@ -40,7 +40,7 @@
     sharePluginApp.controller('sharePluginCtrl', ['$scope', '$sce', function ($scope, $sce) {
         var view = null;
         $scope.data = sharePluginShared.getDefaultScopeData();
-
+		$scope.qrCodeUrl = 'https://chart.googleapis.com/chart?chs=180x180&cht=qr&chl=http://www.buildfire.com/proxy?appId=' + window.appContext.currentApp.appId + '&liveMode=' + window.appContext.currentApp.liveMode;
         function initDeviceSize(callback) {
             $scope.deviceHeight = window.innerHeight;
             $scope.deviceWidth = window.innerWidth;
