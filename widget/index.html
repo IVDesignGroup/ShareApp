@@ -1,68 +1,125 @@
-<!DOCTYPE html>
-<html lang="en" ng-app="buildfire" buildfire="enabled">
-<head>
+﻿<!DOCTYPE html>
+<html data-ng-app="sharePlugin">
+<head lang="en">
+    <title>Share Plugin</title>
+    <meta charset="UTF-8">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../../../../styles/bootstrap.css">
-    <link rel="stylesheet" href="../../../../styles/siteIcons.css">
-    <link rel="stylesheet" href="../../../../styles/appStyle.css">
-    <link rel="stylesheet" href="../../../../styles/helper.css">
-    
-    <!-- jQuery & Owl Carousel -->
-	<script src="../../../../scripts/jquery/jquery-1.11.2.min.js"></script>    
-	<script src="../../../../scripts/owlCarousel/owlCarousel.js"></script>
-    <link rel="stylesheet" href="../../../../scripts/owlCarousel/owlCarousel.css">
+    <link href="../../../scripts/owlCarousel/owlCarousel.css" rel="stylesheet"/>
+    <link href="../../../styles/helper.css" rel="stylesheet"/>
+    <link href="../../../styles/siteIcons.css" rel="stylesheet"/>
 
-    <!-- Meta -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
-	
+    <!-- JS -->
+    <script type="text/javascript" src="../../../scripts/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/jquery/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="../../../scripts/buildfire.js"></script>
+    <script type="text/javascript" src="../../../scripts/owlCarousel/owlCarousel.js"></script>
+    <script type="text/javascript" src="../js/shared.js"></script>
 </head>
-<script type="text/javascript" charset="utf-8">
-	$(function(){
-		var slides = $('.plugin-slider .plugin-slide').length;
-		
-		// Slider needs at least 2 slides or you'll get an error.
-		if(slides > 1){
-			$('.plugin-slider').owlCarousel({
-				loop:true,
-				navigation: false,
-                dots: true,
-                singleItem: true,
-                items: 1,
-                itemsMobile: true,
-                autoHeight: false,
-			});	
-		}
-	})
-</script>
+<body ng-controller="sharePluginCtrl" data-ng-cloak>
 <div class="holder padding-zero">
-	<div class="share-plugin">
-		<div class="share-banner clearfix">
-			<div class="plugin-slider text-center">
-				<div class="plugin-slide">
-					<img src="http://www.placehold.it/1280x720.jpg">
-				</div>
-				<div class="plugin-slide">
-					<img src="http://www.placehold.it/1280x720.jpg">
-				</div>
-				<div class="plugin-slide">
-					<img src="http://www.placehold.it/1280x720.jpg">
-				</div>
-			</div>
-		</div>
-		<div class="text-center padded padding-bottom-zero clearfix">
-			<p>Scan to share with QR Code.</p>
-			<div class="qr-holder margin-top-ten" style="max-width:190px; margin:0 auto;">
-				<img src="http://www.placehold.it/180x180">
-				<div class="margin-top-fifteen">
-					<a class="btn btn-primary stretch">Share the App Via...</a>
-				</div>
-			</div>
-			<div class="content margin-top-fifteen text-left">
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-			</div>
-		</div>
-	</div>
+    <div class="share-plugin">
+        <div class="share-banner clearfix" data-ng-show="data.content.carouselImages.length">
+            <div id="carousel" class="plugin-slider text-center"></div>
+        </div>
+        <div class="text-center padded padding-bottom-zero clearfix">
+            <p>Scan to share with QR Code.</p>
+            <div class="qr-holder margin-top-ten" style="max-width:190px; margin:0 auto;">
+                <img ng-src="https://chart.googleapis.com/chart?chs=180x180&cht=qr&chl=http://www.buildfire.com/proxy?appid=12345"/>
+                <div class="margin-top-fifteen">
+                    <a class="btn btn-primary stretch">Share the App Via...</a>
+                </div>
+            </div>
+            <div class="content margin-top-fifteen text-left" data-ng-bind-html="data.content.contentBody"></div>
+        </div>
+    </div>
 </div>
+<script>
+    var sharePluginApp = angular.module('sharePlugin', []);
+
+    sharePluginApp.controller('sharePluginCtrl', ['$scope', '$sce', function ($scope, $sce) {
+        var view = null;
+        $scope.data = sharePluginShared.getDefaultScopeData();
+
+        function initDeviceSize(callback) {
+            $scope.deviceHeight = window.innerHeight;
+            $scope.deviceWidth = window.innerWidth;
+            $scope.sliderHeight = Math.ceil(9 * $scope.deviceWidth / 16);
+            if (callback) {
+                if ($scope.deviceWidth == 0 || $scope.deviceHeight == 0) {
+                    setTimeout(function () {
+                        initDeviceSize(callback);
+                    }, 500);
+                } else {
+                    callback();
+                    if (!$scope.$$phase && !$scope.$root.$$phase) {
+                        $scope.$apply();
+                    }
+                }
+            }
+        }
+
+        /**
+         * bind data to the scope
+         **/
+        function bind(data) {
+            debugger;
+            $scope.data = data;
+            if (data && data.content && data.content.contentBody) {
+                $scope.data.content.contentBody = $sce.trustAsHtml(data.content.contentBody);
+            }
+            if ($scope.data.content && $scope.data.content.carouselImages) {
+                initDeviceSize(function () {
+                    if (!view) {
+                        view = new buildfire.components.carousel.view("#carousel", $scope.data.content.carouselImages);
+                    } else {
+                        view.loadItems($scope.data.content.carouselImages);
+                    }
+                });
+            }
+
+            if (!$scope.$$phase && !$scope.$root.$$phase) {
+                $scope.$apply();
+            }
+        }
+
+        /**
+         * Go pull saved data
+         **/
+        function loadData() {
+            buildfire.datastore.get(function (err, result) {
+                if (result && result.data && !angular.equals({}, result.data)) bind(result.data);
+            });
+        }
+
+        loadData();
+
+        /**
+         * when a refresh is triggered get reload data
+         **/
+        buildfire.datastore.onRefresh(loadData);
+
+        buildfire.datastore.onUpdate(function (result) {
+            bind(result);
+        });
+
+        $scope.cropImage = function (url, settings) {
+            var options = {};
+            if (!url) {
+                return "";
+            }
+            else {
+                if (settings.height) {
+                    options.height = settings.height;
+                }
+                if (settings.width) {
+                    options.width = settings.width;
+                }
+                return buildfire.imageLib.cropImage(url, options);
+            }
+        };
+    }]);
+</script>
+</body>
+
 </html>
