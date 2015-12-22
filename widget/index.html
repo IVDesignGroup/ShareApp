@@ -27,7 +27,7 @@
             <div class="qr-holder margin-top-ten" style="max-width:190px; margin:0 auto;">
                 <img ng-src="qrCodeUrl"/>
                 <div class="margin-top-fifteen">
-                    <a class="btn btn-primary stretch">Share the App Via...</a>
+                    <a class="btn btn-primary stretch" data-ng-click="share();" data-ng-disabled="qrCodeUrl">Share the App Via...</a>
                 </div>
             </div>
             <div class="content margin-top-fifteen text-left" data-ng-bind-html="data.content.contentBody"></div>
@@ -47,6 +47,9 @@
                             .replace('[appId]', context.appId)
                             .replace('[liveMode]', context.liveMode);
         });
+		$scope.share = function() {
+			buildfire.device.share({subject:'Share App', text:'navigate to:', link: $scope.qrCodeUrl});
+		};
         function initDeviceSize(callback) {
             $scope.deviceHeight = window.innerHeight;
             $scope.deviceWidth = window.innerWidth;
@@ -69,7 +72,6 @@
          * bind data to the scope
          **/
         function bind(data) {
-            debugger;
             $scope.data = data;
             if (data && data.content && data.content.contentBody) {
                 $scope.data.content.contentBody = $sce.trustAsHtml(data.content.contentBody);
