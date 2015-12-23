@@ -1,22 +1,26 @@
 {
-  "author":"Daniel Hindi"
-,"pluginName":"Share App Plugin"
-,"pluginDescription":"Share App Plugin Description"
-,"supportEmail":"[Your support Email]"
-,"control":{
-  "content":{
-    "enabled":true
-  }
-, "design":{
-    "enabled":false
-  }
-, "settings":{
-    "enabled":true
-  }
-}
-,"widget":{
+   "author":"BuildFire",
+   "pluginName":"Share",
+   "pluginDescription":"A plugin to share app",
+   "supportEmail":"support@buildfire.com",
+   "control":{
+      "content":{
+         "enabled":true
+      },
+      "design":{
+         "enabled":false
+      },
+      "settings":{
+         "enabled":false
+      }
+   },
+   "widget":{
 
-},
-  "features" : [],
-  "languages" : ["en"]
+   },
+   "features":[
+		{"name" : "sharing"}
+   ],
+   "languages":[
+      "en"
+   ]
 }
