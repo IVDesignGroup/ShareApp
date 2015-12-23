@@ -37,15 +37,14 @@
 <script>
     var sharePluginApp = angular.module('sharePlugin', []);
     var qrGeneratorUrl = 'https://chart.googleapis.com/chart?chs=180x180&cht=qr&chl=' +
-            '[appHost]/proxy?appId=[appId]&liveMode=[liveMode]';
+            '[appHost]/api/promoProxy/[appId]/';
     sharePluginApp.controller('sharePluginCtrl', ['$scope', '$sce', function ($scope, $sce) {
         var view = null;
         $scope.data = sharePluginShared.getDefaultScopeData();
         buildfire.getContext(function (context) {
             $scope.qrCodeUrl = qrGeneratorUrl
                             .replace('[appHost]', context.endPoints.appHost)
-                            .replace('[appId]', context.appId)
-                            .replace('[liveMode]', context.liveMode);
+                            .replace('[appId]', context.appId);
         });
 		$scope.share = function() {
 			buildfire.device.share({subject:'Share App', text:'navigate to:', link: $scope.qrCodeUrl});
