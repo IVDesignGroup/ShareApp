@@ -1,7 +1,7 @@
 {
    "author":"BuildFire",
-   "pluginName":"Share",
-   "pluginDescription":"A plugin to share app",
+   "pluginName":"Share App",
+   "pluginDescription":"Leverage your users' networks by encouraging them to share your app via Facebook, Twitter, SMS, and email.",
    "supportEmail":"support@buildfire.com",
    "control":{
       "content":{
@@ -18,7 +18,6 @@
 
    },
    "features":[
-		{"name" : "sharing"}
    ],
    "languages":[
       "en"
