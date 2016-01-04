@@ -97,11 +97,6 @@
             }
 
             if (newObj == undefined) return;
-            if ($scope.frmMain.$invalid) {
-                console.warn('invalid data, details will not be saved');
-                return;
-            }
-
             sharePluginShared.save(newObj);
         };
 
