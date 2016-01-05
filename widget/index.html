@@ -52,8 +52,8 @@
 		
         buildfire.getContext(function (context) {
             $scope.qrCodeUrl = qrGeneratorUrl
-                            .replace('[appHost]', buildfire.context.endPoints.appHost)
-                            .replace('[appId]', buildfire.context.appId);
+                            .replace('[appHost]', context.endPoints.appHost)
+                            .replace('[appId]', context.appId);
         });
 		$scope.share = function() {
 			buildfire.device.share({subject: 'Share App', text: $scope.data.content.shareMessage, link: $scope.qrCodeUrl});
