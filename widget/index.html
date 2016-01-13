@@ -16,7 +16,7 @@
     <script type="text/javascript" src="../../../scripts/owlCarousel/owlCarousel.js"></script>
     <script type="text/javascript" src="../../../scripts/buildfire/components/carousel/carousel.js"></script>
     <script type="text/javascript" src="../../../scripts/buildfire/components/pluginInstance/sortableList.js"></script>
-	<script type="text/javascript" src="../js/shared.js"></script>
+    <script type="text/javascript" src="../js/shared.js"></script>
 </head>
 <body ng-controller="sharePluginCtrl" data-ng-cloak>
 <div class="holder padding-zero">
@@ -43,20 +43,23 @@
     sharePluginApp.controller('sharePluginCtrl', ['$scope', '$sce', function ($scope, $sce) {
         var view = null;
         $scope.data = {
-			content: {
-				carouselImages: [],
-				contentBody: "",
-				shareMessage: ""
-			}
-		};
-		
-        buildfire.getContext(function (context) {
-			$scope.shareUrl = shareUrl.replace('[appHost]', context.endPoints.appHost).replace('[appId]', context.appId);
+            content: {
+                carouselImages: [],
+                contentBody: "",
+                shareMessage: ""
+            }
+        };
+
+        buildfire.getContext(function (err, context) {
+            if (err) {
+                console.log(err);
+            }
+            $scope.shareUrl = shareUrl.replace('[appHost]', context.endPoints.appHost).replace('[appId]', context.appId);
             $scope.qrCodeUrl = qrGeneratorUrl + shareUrl;
         });
-		$scope.share = function() {
-			buildfire.device.share({subject: 'Share App', text: $scope.data.content.shareMessage, link: $scope.shareUrl});
-		};
+        $scope.share = function () {
+            buildfire.device.share({subject: 'Share App', text: $scope.data.content.shareMessage, link: $scope.shareUrl});
+        };
         function initDeviceSize(callback) {
             $scope.deviceHeight = window.innerHeight;
             $scope.deviceWidth = window.innerWidth;
