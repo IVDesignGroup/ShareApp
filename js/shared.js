@@ -15,7 +15,8 @@ sharePluginShared.getEditorOptions = function () {
         plugins: 'advlist autolink link image lists charmap print preview',
         skin: 'lightgray',
         trusted: true,
-        theme: 'modern'
+        theme: 'modern',
+        format: 'html'
     };
 };
 
