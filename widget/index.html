@@ -55,7 +55,7 @@
                 console.log(err);
             }
             $scope.shareUrl = shareUrl.replace('[appHost]', context.endPoints.appHost).replace('[appId]', context.appId);
-            $scope.qrCodeUrl = qrGeneratorUrl + shareUrl;
+            $scope.qrCodeUrl = qrGeneratorUrl + $scope.shareUrl;
         });
         $scope.share = function () {
             buildfire.device.share({subject: 'Share App', text: $scope.data.content.shareMessage, link: $scope.shareUrl});
