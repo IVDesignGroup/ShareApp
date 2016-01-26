@@ -90,7 +90,7 @@
             if (data && data.content && data.content.contentBody) {
                 $scope.data.content.contentBody = $sce.trustAsHtml(data.content.contentBody);
             }
-            if ($scope.data.content && $scope.data.content.carouselImages) {
+            if ($scope.data && $scope.data.content && $scope.data.content.carouselImages) {
                 initDeviceSize(function () {
                     if (!view) {
                         view = new buildfire.components.carousel.view("#carousel", $scope.data.content.carouselImages);
@@ -110,7 +110,12 @@
          **/
         function loadData() {
             buildfire.datastore.get(function (err, result) {
-                if (result && result.data && !angular.equals({}, result.data)) bind(result.data);
+                if (err) {
+					console.log('err: ', err);
+				}
+				else {
+					bind(result.data);
+				}
             });
         }
 
