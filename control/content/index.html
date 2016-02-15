@@ -1,122 +1,133 @@
 ﻿<!DOCTYPE html>
 <html data-ng-app="sharePlugin">
 <head lang="en">
-    <title>Share Plugin</title>
-    <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
-    <!-- CSS -->
-    <link href="../../../../styles/helper.css" rel="stylesheet"/>
-    <link href="../../../../styles/siteIcons.css" rel="stylesheet"/>
+  <title>Share Plugin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- JS -->
-    <script src="../../../../scripts/buildfire.js"></script>
-    <script src="../../../../scripts/angular/angular.min.js"></script>
-    <script src="../../../../scripts/tinymce/tinymce.min.js"></script>
-    <script src="../../../../scripts/tinymce/ui-tinymce.js"></script>
-    <script src="../../../../scripts/jquery/jquery-1.11.2.min.js"></script>
+  <!-- CSS -->
+  <link href="../../../../styles/helper.css" rel="stylesheet"/>
+  <link href="../../../../styles/siteIcons.css" rel="stylesheet"/>
 
-    <script src="../../../../scripts/sortable.min.js"></script>
-    <script src="../../../../scripts/buildfire/components/carousel/carousel.js"></script>
-    <script src="../../js/shared.js"></script>
+  <!-- JS -->
+  <script src="../../../../scripts/buildfire.js"></script>
+  <script src="../../../../scripts/angular/angular.min.js"></script>
+  <script src="../../../../scripts/tinymce/tinymce.min.js"></script>
+  <script src="../../../../scripts/tinymce/ui-tinymce.js"></script>
+  <script src="../../../../scripts/jquery/jquery-1.11.2.min.js"></script>
+
+  <script src="../../../../scripts/sortable.min.js"></script>
+  <script
+      src="../../../../scripts/buildfire/components/carousel/carousel.js"></script>
+  <script src="../../js/shared.js"></script>
 
 </head>
-<body data-ng-controller="sharePluginCtrl" data-ng-cloak data-ng-show="datastoreInitialized">
+<body data-ng-controller="sharePluginCtrl" data-ng-cloak
+      data-ng-show="datastoreInitialized">
 <div class="share-plugin">
 
-    <div id="carousel"></div>
-    <hr class="none">
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Content Body</span>
-        </div>
-        <div class="main col-md-9 pull-right">
-            <textarea id="contentBody" ui-tinymce="editorOptions" class="form-control" rows="5"
-                      data-ng-model="data.content.contentBody"></textarea>
-        </div>
+  <div id="carousel"></div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>Content Body</span>
     </div>
-    <hr class="none">
-    <div class="item clearfix row">
-        <div class="labels col-md-3 padding-right-zero pull-left">
-            <span>Share Message</span>
-        </div>
-        <div class="main col-md-9 pull-right">
+    <div class="main col-md-9 pull-right">
+            <textarea id="contentBody" ui-tinymce="editorOptions"
+                      class="form-control" rows="5"
+                      data-ng-model="data.content.contentBody"></textarea>
+    </div>
+  </div>
+  <hr class="none">
+  <div class="item clearfix row">
+    <div class="labels col-md-3 padding-right-zero pull-left">
+      <span>Share Message</span>
+    </div>
+    <div class="main col-md-9 pull-right">
             <textarea id="shareMessage" class="form-control" rows="5"
                       data-ng-model="data.content.shareMessage"></textarea>
-        </div>
     </div>
+  </div>
+  <br>
+  <div class="item clearfix row">
+    <div class="col-md-9 pull-right">
+      <p>NOTE: You can configure where Share App link will take your users by
+        going
+        to "Share Settings" under "Settings" in the left menu.</p>
+    </div>
+  </div>
 </div>
 
 <script>
-    var sharePluginApp = angular.module('sharePlugin', ['ui.tinymce']);
+  var sharePluginApp = angular.module('sharePlugin', ['ui.tinymce']);
 
-    sharePluginApp.controller('sharePluginCtrl', ['$scope', function ($scope) {
-        var editor = new buildfire.components.carousel.editor("#carousel");
-        var tmrDelay = null;
+  sharePluginApp.controller('sharePluginCtrl', ['$scope', function ($scope) {
+    var editor = new buildfire.components.carousel.editor("#carousel");
+    var tmrDelay = null;
 
-        $scope.editorOptions = sharePluginShared.getEditorOptions();
-        $scope.data = sharePluginShared.getDefaultScopeData();
+    $scope.editorOptions = sharePluginShared.getEditorOptions();
+    $scope.data = sharePluginShared.getDefaultScopeData();
 
-        /*
-         * Go pull any previously saved data
-         */
-        buildfire.datastore.get(function (err, result) {
+    /*
+     * Go pull any previously saved data
+     */
+    buildfire.datastore.get(function (err, result) {
 
-            if (!err) {
-                $scope.datastoreInitialized = true;
-            } else {
-                console.error("Error: ", err);
-                return;
-            }
+      if (!err) {
+        $scope.datastoreInitialized = true;
+      } else {
+        console.error("Error: ", err);
+        return;
+      }
 
-            if (result && result.data && !angular.equals({}, result.data)) {
-                $scope.data = result.data;
-                $scope.id = result.id;
-                if ($scope.data.content && $scope.data.content.carouselImages)
-                    editor.loadItems($scope.data.content.carouselImages);
-                if (tmrDelay) clearTimeout(tmrDelay);
-            }
+      if (result && result.data && !angular.equals({}, result.data)) {
+        $scope.data = result.data;
+        $scope.id = result.id;
+        if ($scope.data.content && $scope.data.content.carouselImages)
+          editor.loadItems($scope.data.content.carouselImages);
+        if (tmrDelay) clearTimeout(tmrDelay);
+      }
 
-            /*
-             * watch for changes in data and trigger the saveDataWithDelay function on change
-             * */
-            $scope.$watch('data', saveDataWithDelay, true);
+      /*
+       * watch for changes in data and trigger the saveDataWithDelay function on change
+       * */
+      $scope.$watch('data', saveDataWithDelay, true);
 
-            if (!$scope.$$phase && !$scope.$root.$$phase) {
-                $scope.$apply();
-            }
-        });
+      if (!$scope.$$phase && !$scope.$root.$$phase) {
+        $scope.$apply();
+      }
+    });
 
-        /*
-         * Call the datastore to save the data object
-         */
-        var saveData = function (newObj) {
-            if (!$scope.datastoreInitialized) {
-                console.error("Error with datastore didn't get called");
-                return;
-            }
+    /*
+     * Call the datastore to save the data object
+     */
+    var saveData = function (newObj) {
+      if (!$scope.datastoreInitialized) {
+        console.error("Error with datastore didn't get called");
+        return;
+      }
 
-            if (newObj == undefined) return;
-            sharePluginShared.save(newObj);
-        };
+      if (newObj == undefined) return;
+      sharePluginShared.save(newObj);
+    };
 
-        /*
-         * create an artificial delay so api isnt called on every character entered
-         * */
-        var saveDataWithDelay = function (newObj, oldObj) {
-            if (tmrDelay) clearTimeout(tmrDelay);
-            if (angular.equals(newObj, oldObj)) return;
-            tmrDelay = setTimeout(function () {
-                saveData(newObj);
-            }, 500);
-        };
+    /*
+     * create an artificial delay so api isnt called on every character entered
+     * */
+    var saveDataWithDelay = function (newObj, oldObj) {
+      if (tmrDelay) clearTimeout(tmrDelay);
+      if (angular.equals(newObj, oldObj)) return;
+      tmrDelay = setTimeout(function () {
+        saveData(newObj);
+      }, 500);
+    };
 
-        // this method will be called when a new item added to the list
-        editor.onAddItems = editor.onDeleteItem = editor.onItemChange = editor.onOrderChange = function () {
-            $scope.data.content.carouselImages = editor.items;
-            sharePluginShared.digest($scope);
-        };
-    }]);
+    // this method will be called when a new item added to the list
+    editor.onAddItems = editor.onDeleteItem = editor.onItemChange = editor.onOrderChange = function () {
+      $scope.data.content.carouselImages = editor.items;
+      sharePluginShared.digest($scope);
+    };
+  }]);
 </script>
 </body>
 </html>
