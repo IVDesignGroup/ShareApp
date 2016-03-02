@@ -22,7 +22,10 @@
 <div class="holder padding-zero">
     <div class="share-plugin">
         <div class="share-banner clearfix" data-ng-show="data.content.carouselImages.length">
-            <div id="carousel" class="plugin-slider text-center"></div>
+            <img src="images/16x9.png" ng-if="!carouselFlags.canShowCarousel"
+                 style="position: absolute; width: 100%;"/>
+            <div id="carousel" class="plugin-slider text-center"
+                 load-carousel="{{carouselFlags.carouselHasLoaded}}" data-ng-show="carouselFlags.canShowCarousel"></div>
         </div>
         <div class="text-center padded padding-bottom-zero clearfix">
             <p>Scan to share with QR Code.</p>
@@ -42,6 +45,10 @@
     var shareUrl = '[appHost]/api/promoProxy/[appId]/';
     sharePluginApp.controller('sharePluginCtrl', ['$scope', '$sce', function ($scope, $sce) {
         var view = null;
+      $scope.carouselFlags = {
+        carouselHasLoaded: false,
+        canShowCarousel: false
+      };
 		$scope.disableShare = true;
         $scope.data = {
             content: {
@@ -97,6 +104,10 @@
                     } else {
                         view.loadItems($scope.data.content.carouselImages);
                     }
+                  $scope.carouselFlags.carouselHasLoaded = true;
+                  if (!$scope.$$phase && !$scope.$root.$$phase) {
+                    $scope.$apply();
+                  }
                 });
             }
 
@@ -146,6 +157,28 @@
             }
         };
     }]);
+    sharePluginApp.directive("loadCarousel", [function(){
+      return{
+        restrict : 'A',
+        link : function(scope, elem, attrs){
+          var isLoaded = false;
+          attrs.$observe("loadCarousel", function() {
+            if(!isLoaded) {
+              isLoaded = true;
+
+              setTimeout(function() {
+                $(elem).find("img").eq(0).on("load", function() {
+                  scope.carouselFlags.canShowCarousel = true;
+                  scope.$digest();
+                });
+              }, 1000);
+
+            }
+          });
+
+        }
+      }
+    }])
 </script>
 </body>
 
