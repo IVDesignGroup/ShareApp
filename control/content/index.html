@@ -26,7 +26,14 @@
 <body data-ng-controller="sharePluginCtrl" data-ng-cloak
       data-ng-show="datastoreInitialized">
 <div class="share-plugin">
-
+  <div class="item clearfix row">
+    <div class="col-md-9 pull-right">
+      <p>NOTE: You can configure where Share App link will take your users by
+        going
+        to "Share Settings" under "Settings" in the left menu.</p>
+    </div>
+  </div>
+  <br>
   <div id="carousel"></div>
   <hr class="none">
   <div class="item clearfix row">
@@ -47,14 +54,6 @@
     <div class="main col-md-9 pull-right">
             <textarea id="shareMessage" class="form-control" rows="5"
                       data-ng-model="data.content.shareMessage"></textarea>
-    </div>
-  </div>
-  <br>
-  <div class="item clearfix row">
-    <div class="col-md-9 pull-right">
-      <p>NOTE: You can configure where Share App link will take your users by
-        going
-        to "Share Settings" under "Settings" in the left menu.</p>
     </div>
   </div>
 </div>
