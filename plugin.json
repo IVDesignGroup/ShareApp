@@ -4,6 +4,7 @@
    "pluginDescription":"Leverage your users' networks by encouraging them to share your app via Facebook, Twitter, SMS, and email.",
    "supportEmail":"support@buildfire.com",
    "supportSite":"http://support.appdocumentation.com/knowledge-base/share-app-plugin-tutorial/",
+   "offlineModeEnabled": true,
    "control":{
       "content":{
          "enabled":true
