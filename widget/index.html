@@ -47,11 +47,13 @@
     var shareUrl = '[appHost]/api/promoProxy/[appId]/';
     sharePluginApp.controller('sharePluginCtrl', ['$scope', '$sce', function ($scope, $sce) {
         var view = null;
-      $scope.carouselFlags = {
-        carouselHasLoaded: false,
-        canShowCarousel: false
-      };
-		$scope.disableShare = false;
+
+        $scope.carouselFlags = {
+            carouselHasLoaded: false,
+            canShowCarousel: false
+        };
+
+        $scope.disableShare = false;
         $scope.data = {
             content: {
                 carouselImages: [],
@@ -64,15 +66,23 @@
             if (err) {
                 console.log(err);
             }
-			else {
-				$scope.shareUrl = shareUrl.replace('[appHost]', context.endPoints.appHost).replace('[appId]', context.appId);
-				$scope.qrCodeUrl = qrGeneratorUrl + $scope.shareUrl;
-				$scope.disableShare = context.device.platform === "web";
-			}
+            else {
+                $scope.shareUrl = shareUrl.replace('[appHost]', context.endPoints.appHost).replace('[appId]', context.appId);
+                $scope.qrCodeUrl = qrGeneratorUrl + $scope.shareUrl;
+                $scope.disableShare = context.device.platform === "web";
+            }
         });
+
         $scope.share = function () {
-            buildfire.device.share({subject: 'Share App', text: $scope.data.content.shareMessage, link: $scope.shareUrl});
+            var shareMessage = '';
+
+            if($scope.data && $scope.data.content && $scope.data.content.shareMessage ){
+                shareMessage = $scope.data.content.shareMessage;
+            }
+
+            buildfire.device.share({subject: 'Share App', text: shareMessage, link: $scope.shareUrl});
         };
+
         function initDeviceSize(callback) {
             $scope.deviceHeight = window.innerHeight;
             $scope.deviceWidth = window.innerWidth;
