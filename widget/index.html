@@ -67,7 +67,7 @@
                 console.log(err);
             }
             else {
-                $scope.shareUrl = shareUrl.replace('[appHost]', context.endPoints.cpDomain).replace('[appId]', context.appId);
+                $scope.shareUrl = shareUrl.replace('[appHost]', context.cpDomain).replace('[appId]', context.appId);
                 $scope.qrCodeUrl = qrGeneratorUrl + $scope.shareUrl;
                 $scope.disableShare = context.device.platform === "web";
             }
