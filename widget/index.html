@@ -44,7 +44,7 @@
 <script>
     var sharePluginApp = angular.module('sharePlugin', []);
     var qrGeneratorUrl = 'https://chart.googleapis.com/chart?chs=180x180&cht=qr&chl=';
-    var shareUrl = '[appHost]/api/promoProxy/[appId]/';
+    var shareUrl = 'http://[appHost]/api/promoProxy/[appId]/';
     sharePluginApp.controller('sharePluginCtrl', ['$scope', '$sce', function ($scope, $sce) {
         var view = null;
 
